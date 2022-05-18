@@ -1,0 +1,89 @@
+<html>
+<head>
+    <title>Ciber-Resilencia</title>
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css">
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <py-env>
+        - matplotlib
+
+    </py-env>
+</head>
+<body>
+    <strong>Ciber-Resilencia</strong>
+    <div id="plot"></div>
+    <py-script output="plot">
+        import matplotlib
+        from matplotlib.figure import Figure
+        from mpl_toolkits.mplot3d import Axes3D
+        from matplotlib import cm
+        import numpy as np
+        from math import *
+        import matplotlib.pyplot as plt
+
+        largo = 10
+        ancho = 10
+        alto = .25
+        XVec = np.arange(0, 10, .2)
+        XSize = XVec.size
+        YVec = np.arange(0, 10, .2)
+        YSize = YVec.size
+
+        ZMat = np.zeros((XSize, YSize))
+        O, P = np.meshgrid(np.arange(0, largo + 1), np.arange(0, ancho + 1))
+        Q = 0 * O
+        A, B = np.meshgrid(np.arange(0, alto + 1), np.arange(0, ancho + 1))
+        C = 0 * A
+        D, F = np.meshgrid(np.arange(0, largo + 1), np.arange(0, alto + 1))
+        G = 0 * D
+        for XIdx in range(0, XSize):
+            for YIdx in range(0, YSize):
+                X = XVec[XIdx]
+                Y = YVec[YIdx]
+
+                Z = eval("cos(X)*sin(Y)*cos(Y)*sin(X)")
+                ZMat[XIdx, YIdx] = Z
+
+        XVecG, YVecG = np.meshgrid(XVec, YVec)
+        fontx = {'family': 'serif',
+                 'color': 'Red',
+                 'weight': 'normal',
+                 'size': 10,
+                 }
+        fonty = {'family': 'serif',
+                 'color': 'Blue',
+                 'weight': 'normal',
+                 'size': 11,
+                 }
+        fontz = {'family': 'serif',
+                 'color': 'Green',
+                 'weight': 'normal',
+                 'size': 11,
+                 }
+        lFig = Figure(figsize=(5, 4), dpi=100)
+        lAxis = Axes3D(lFig, auto_add_to_figure=False)
+        lAxis.set_xlabel("Fases de un evento disruptivo", fontdict=fontx)
+        lAxis.set_xticklabels([])
+        lAxis.set_ylabel("Ciberseguridad", fontdict=fonty)
+        lAxis.set_yticklabels([])
+        lAxis.set_zlabel("Poder Nacional", fontdict=fontz)
+        lAxis.set_zticklabels([])
+
+        lAxis.set_xlim(xmin=0, xmax=largo)
+        lAxis.set_ylim(ymin=0, ymax=ancho)
+        lAxis.set_zlim(zmin=-alto, zmax=alto)
+        lAxis.plot_surface(XVecG, YVecG, ZMat, rstride=1, cstride=1, cmap='plasma')
+        lAxis.plot_surface(O, P, Q-alto, alpha=.2, color="Green")  # Plano Horizontal
+        lAxis.plot_surface(O, P, Q + alto, alpha=.2, color="Green")  # Plano Horizontal con altura
+
+        lAxis.plot_surface(C, B, A/2-alto, alpha=.2, color="Blue")  # Plano Vertical
+        lAxis.plot_surface(C + largo, B, A/2-alto, alpha=.2, color="Blue")  # Plano Vertical con longitud
+
+        lAxis.plot_surface(D, G, F/2-alto, alpha=.2, color="Red")  # Plano Vertical
+        lAxis.plot_surface(D, G + ancho, F/2-alto, alpha=.2, color="Red")  # Plano Vertical con longitud
+        lFig.add_axes(lAxis)
+
+
+        lFig
+    </py-script>
+</body>
+</html>
